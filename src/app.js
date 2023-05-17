@@ -1,9 +1,18 @@
 import express from 'express'
+import fs from 'fs'
 import productsManager from './productsManager.js'
 
 const app = express();
 
+const PORT = 8082
+const server = app.listen(PORT, () => console.log(`Server running on port : ${server.address().port}`))
+server.on ('error', error => console.log(error));
+
+
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+
+
 
 app.get('/', (req, res) => {
     res.send('Mi primer hola desde express')
@@ -16,7 +25,7 @@ app.get('/products', (req, res) => {
 
 })
 
-app.get('/products/:id', (req, res) => {
+app.get('/products/:pid', (req, res) => {
     let id = req.params.id
     let prodPorId = myManager.getProductsByid(products => products.id == id)
     res.send(id)
@@ -33,9 +42,7 @@ app.get('/products/:id', (req, res) => {
 //     res.send(nombre + fecha)
 // })
 
-const server = app.listen(5000, () => {
-    console.log('Server running on port: 5000');
-})
+
 
 const myManager = new productsManager
 
